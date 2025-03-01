@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Freshness Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 50px;
+            font-size: 2.5em;
+            color: #4CAF50;
+        }
+        form {
+            margin-top: 30px;
+            display: inline-block;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            padding: 10px;
+            font-size: 1em;
+            margin: 10px 0;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            margin-top: 40px;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+        .result-bad {
+            color: red;
+        }
+        .result-fresh {
+            color: green;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 1em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Apple Freshness Detector</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    <h2 id="result"></h2>
+
+    <footer>
+        <p>&copy; 2025 Apple Freshness Detector. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(event) {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('file', document.getElementById('file').files[0]);
+
+            let response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            let result = await response.json();
+            let resultElement = document.getElementById('result');
+            resultElement.innerText = result.result;
+
+            if (result.result === "Bad Apple") {
+                resultElement.className = "result-bad";
+            } else if (result.result === "Fresh Apple") {
+                resultElement.className = "result-fresh";
+            } else {
+                resultElement.className = "";
+            }
+        };
+    </script>
+</body>
+</html>
